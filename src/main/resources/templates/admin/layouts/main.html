@@ -11,9 +11,9 @@
           th:href="@{/common/css/{css}.css?v={v}(css=${cssFile}, v=${@utils.version()})}">
     <th:block layout:fragment="addCommonCss"></th:block>
 
-    <link rel="stylesheet" type="text/css" th:href="@{/front/css/style.css?v={v}(v=${@utils.version()})}">
+    <link rel="stylesheet" type="text/css" th:href="@{/admin/css/style.css?v={v}(v=${@utils.version()})}">
     <link rel="stylesheet" type="text/css" th:each="cssFile : ${addCss}"
-          th:href="@{/front/css/{css}.css?v={v}(css=${cssFile}, v=${@utils.version()})}">
+          th:href="@{/admin/css/{css}.css?v={v}(css=${cssFile}, v=${@utils.version()})}">
     <th:block layout:fragment="addCss"></th:block>
 
     <script th:src="@{/common/js/common.js?v={v}(v=${@utils.version()})}"></script>
@@ -26,8 +26,8 @@
     <title th:if="${pageTitle != null}" th:text="${pageTitle}"></title>
 </head>
 <body>
-<header th:replace="~{front/outlines/_header::common}"></header>
+<header th:replace="~{admin/outlines/_header::common}"></header>
 <main layout:fragment="content"></main>
-<footer th:replace="~{front/outlines/_footer::common}"></footer>
+<footer th:replace="~{admin/outlines/_footer::common}"></footer>
 </body>
 </html>
