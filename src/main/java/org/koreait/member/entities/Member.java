@@ -7,6 +7,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
+import java.time.LocalDateTime;
+
 @Data
 @Table("MEMBER")
 public class Member extends BaseEntity {
@@ -20,4 +22,10 @@ public class Member extends BaseEntity {
 
     @Column("termsAgree")
     private boolean termsAgree;
+
+    private boolean locked;         // 계정 중지 상태인지
+    private LocalDateTime expired;  // 계정 만료 일자, null이면 만료 X
+
+    @Column("credentialChangedAt")
+    private LocalDateTime credentialChangedAt;  // 비밀번호 변경 일시
 }

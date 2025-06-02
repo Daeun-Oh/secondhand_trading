@@ -6,6 +6,7 @@ import org.koreait.member.entities.Member;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 @Data
@@ -33,10 +34,13 @@ public class MemberInfo implements UserDetails {
         return authorities;
     }
 
-
+    // 계정이 만료되지 않았는지
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+        LocalDateTime date = member.getExpired();
+
+        // expired가 현재 시각보다 이전이면 만료된 계정
+        return date == null || date.isAfter(LocalDateTime.now());
     }
 
     // 회원 탈퇴 여부
@@ -45,14 +49,20 @@ public class MemberInfo implements UserDetails {
         return member.getDeletedAt() == null;
     }
 
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
     // 비밀번호가 만료되지 않았는지
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
+        LocalDateTime date = member.getCredentialChangedAt();
+        // 비밀번호 변경 시간이 90일이 경과한 경우
+        // -> 현재 날짜 시간에서 90일을 뺀 날짜보다 작은 경우는 90일을 경과한 것
+        LocalDateTime dateBefore90 = LocalDateTime.now().minusDays(90L);
+        return date != null && date.isAfter(dateBefore90);
+    }
+
+
+    // 계정이 잠겨 있지 않은지
+    @Override
+    public boolean isAccountNonLocked() {
+        return !member.isLocked();
     }
 }

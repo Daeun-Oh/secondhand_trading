@@ -3,7 +3,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{front/layouts/main}">
     <main layout:fragment="content">
-        <h1 th:text="#{pageTitle}"></h1>
+        <h1 th:text="${pageTitle}"></h1>
         <form name="frmLogin" method="post" th:action="@{/member/login}" autocomplete="off" th:object="${requestLogin}">
             <ul>
                 <li>
