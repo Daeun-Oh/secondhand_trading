@@ -38,3 +38,10 @@ file:
   upload:
     url: ${file.url}
     path: ${file.path}
+
+# 파이썬 설정
+python:
+  path:
+    # 경로 주입 받기
+    base: ${python.base}
+    trend: ${python.trend}

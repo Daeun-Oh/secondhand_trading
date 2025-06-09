@@ -1,0 +1,9 @@
+CREATE TABLE TREND (
+    seq BIGINT AUTO_INCREMENT PRIMARY KEY,
+    category VARCHAR(40),
+    wordCloud VARCHAR(60) NOT NULL,
+    keywords TEXT NOT NULL,
+    createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+    modifiedAt DATETIME,
+    deletedAt DATETIME
+);
