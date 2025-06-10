@@ -1,7 +1,9 @@
 package org.koreait.member.services;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.koreait.global.search.ListData;
+import org.koreait.global.search.Pagination;
 import org.koreait.member.MemberInfo;
 import org.koreait.member.constants.Authority;
 import org.koreait.member.controllers.MemberSearch;
@@ -32,6 +34,7 @@ public class MemberInfoService implements UserDetailsService {
 
     private final MemberRepository repository;
     private final JdbcTemplate jdbcTemplate;
+    private final HttpServletRequest request;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -104,7 +107,7 @@ public class MemberInfoService implements UserDetailsService {
 
         /* 권한 조건 검색 S */
         List<Authority> authorities = search.getAuthorityList();
-        if (!authorities.isEmpty()) {
+        if (authorities != null && !authorities.isEmpty()) {
             addWhere.add(" authority IN ("
                     + Stream.generate(() -> "?").limit(authorities.size()).collect(Collectors.joining(",")) // 물음표 생성 (개수는 authorities의 길이)
                     + ")");
@@ -112,23 +115,32 @@ public class MemberInfoService implements UserDetailsService {
         }
         /* 권한 조건 검색 E */
 
+        StringBuffer sb = new StringBuffer(2000);
+        StringBuffer sb2 = new StringBuffer(2000);
+        sb.append("SELECT * FROM MEMBER");
+        sb2.append("SELECT COUNT(*) FROM MEMBER");
+
+        if (!addWhere.isEmpty()) {
+            String where = " WHERE " + String.join(" AND ", addWhere);
+            sb.append(where);
+            sb2.append(where);
+        }
+
+        sb.append(" ORDER BY createdAt DESC");
+        sb.append(" LIMIT ?, ?"); // 첫 번째 ?: offset, 두 번째 ?: limit
+
         params.add(offset);  // 아래 쿼리의 첫 번째 물음표
         params.add(limit);   // 아래 쿼리의 두 번째 물음표
 
-        StringBuffer sb = new StringBuffer(2000);
-        sb.append("SELECT * FROM MEMBER");
-
-        if (!addWhere.isEmpty()) {
-            sb.append(" WHERE ");
-            sb.append(String.join(" AND ", addWhere));
-        }
-
-        sb.append("ORDER BY createdAt DESC");
-        sb.append("LIMIT ?, ?"); // 첫 번째 ?: offset, 두 번째 ?: limit
-
         List<Member> items = jdbcTemplate.query(sb.toString(), this::mapper, params.toArray());
 
-        return null;
+        int total = jdbcTemplate.queryForObject(sb2.toString(), int.class); // 검색 조건에 따른 전체 레코드 개수
+
+        total = 100000;
+
+        Pagination pagination = new Pagination(page, total, 10, 20, request);
+
+        return new ListData<>(items, pagination);
     }
 
     private Member mapper(ResultSet rs, int i) throws SQLException {

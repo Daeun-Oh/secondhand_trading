@@ -54,7 +54,7 @@ main > aside {
     margin-right: 30px;
 }
 
-main > #main-content {
+main > .main-content {
     flex-grow: 1;
 }
 /* 관리자 기본 레이아웃 구성 E */
@@ -331,3 +331,31 @@ input[type='checkbox'] + label.standalone {
     height: 23px;
 }
 /* 체크박스 공통 E */
+
+/* 페이징 공통 S */
+.pagination {
+    display: flex;
+    justify-content: center;
+    height: 45px;
+    margin: 25px 0;
+}
+
+.pagination > a {
+    min-width: 45px;
+    padding: 0 10px;
+    border: 1px solid #000;
+    border-radius: 3px;
+    line-height: 43px;
+    font-size: 1.2rem;
+    text-align: center;
+}
+
+.pagination > a + a {
+    margin-left: 3px;
+}
+
+.pagination > a.on {
+    background: #000;
+    color: #fff;
+}
+/* 페이징 공통 E */
