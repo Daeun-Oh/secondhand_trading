@@ -69,4 +69,8 @@ public class Utils {
 
         return messageSource.getMessage(code, null, locale);
     }
+
+    public String getParam(String name) {
+        return request.getParameter(name);
+    }
 }

@@ -68,6 +68,8 @@ public class SecurityConfig {
         });
         /* 인가 설정 E */
 
+        http.headers(c -> c.frameOptions(f -> f.sameOrigin()));
+
         return http.build();
     }
 

@@ -129,14 +129,14 @@ public class MemberInfoService implements UserDetailsService {
         sb.append(" ORDER BY createdAt DESC");
         sb.append(" LIMIT ?, ?"); // 첫 번째 ?: offset, 두 번째 ?: limit
 
+        int total = jdbcTemplate.queryForObject(sb2.toString(), int.class, params.toArray()); // 검색 조건에 따른 전체 레코드 개수
+
         params.add(offset);  // 아래 쿼리의 첫 번째 물음표
         params.add(limit);   // 아래 쿼리의 두 번째 물음표
 
         List<Member> items = jdbcTemplate.query(sb.toString(), this::mapper, params.toArray());
 
-        int total = jdbcTemplate.queryForObject(sb2.toString(), int.class); // 검색 조건에 따른 전체 레코드 개수
-
-        total = 100000;
+        // total = 100000;
 
         Pagination pagination = new Pagination(page, total, 10, 20, request);
 
