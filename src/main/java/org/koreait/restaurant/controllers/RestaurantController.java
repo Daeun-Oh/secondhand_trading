@@ -1,6 +1,5 @@
 package org.koreait.restaurant.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.koreait.global.libs.Utils;
@@ -29,15 +28,17 @@ public class RestaurantController {
     private final Utils utils;
 
     @GetMapping({"", "/list"})
-    public String list(@ModelAttribute RestaurantSearch search, Model model) {
+    public String list(Model model) {
         commonProcess("list", model);
 
-        List<Restaurant> items = infoService.getNearest(search);
-        model.addAttribute("items", items);
-        try {
-            model.addAttribute("json", om.writeValueAsString(items));
-        } catch (JsonProcessingException e) {}
         return utils.tpl("restaurant/list");
+    }
+
+    @ResponseBody
+    @GetMapping("/search")
+    public List<Restaurant> search(@ModelAttribute RestaurantSearch search) {
+        List<Restaurant> items = infoService.getNearest(search);
+        return items;
     }
 
     @ResponseBody
@@ -59,15 +60,18 @@ public class RestaurantController {
         String pageTitle = "";
         List<String> addCss = new ArrayList<>();
         List<String> addScript = new ArrayList<>();
+        List<String> addCommonScript = new ArrayList<>();
 
         if (mode.equals("list")) {
             pageTitle = utils.getMessage("오늘의 식당");
             addCss.add("restaurant/list");
             addScript.add("restaurant/list");
+            addCommonScript.add("map");
         }
 
         model.addAttribute("pageTitle", pageTitle);
         model.addAttribute("addCss", addCss);
         model.addAttribute("addScript", addScript);
+        model.addAttribute("addCommonScript", addCommonScript);
     }
 }
