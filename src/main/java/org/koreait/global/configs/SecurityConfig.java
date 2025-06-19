@@ -56,7 +56,7 @@ public class SecurityConfig {
          * anyRequest().authenticated() : 회원 전용 페이지가 기본, 일부 페이지 -> 비회원 사이트
          */
         http.authorizeHttpRequests(c -> {
-           c.requestMatchers("/mypage/**").authenticated()  // 회원 전용
+           c.requestMatchers("/mypage/**", "/survey/diabetes/**").authenticated()  // 회원 전용
                    .requestMatchers("/member/join", "/member/login").anonymous()  // 비회원 전용 (로그인 상태에서 접근 불가)
                    //.requestMatchers("/admin/**").hasAnyAuthority("ADMIN")  // 관리자 전용
                    .anyRequest().permitAll();   // 나머지 요청은 모두에게 허용

@@ -83,11 +83,8 @@ public class DiabetesSurveyPredictService {
         item.add(form.isHeartDisease() ? 1 : 0);
         item.add(form.getSmokingHistory().getNum());
 
-        // BMI 지수 계산
-        double height = form.getHeight() / 100.0;
-        double weight = form.getWeight();
-
-        double bmi = Math.round((weight / Math.pow(height, 2)) * 100.0) / 100.0;
+        // BMI 지수
+        double bmi = getBMI(form.getHeight(), form.getWeight());
         item.add(bmi);
 
         item.add(form.getHbA1c());               // 당화혈색소 수치
@@ -95,5 +92,13 @@ public class DiabetesSurveyPredictService {
         System.out.println("item: " + item);
 
         return isDiabetes(item);
+    }
+
+    // BMI 지수 계산
+    public double getBMI(double height, double weight) {
+
+        height = height / 100.0;
+
+        return Math.round((weight / Math.pow(height, 2)) * 100.0) / 100.0;
     }
 }

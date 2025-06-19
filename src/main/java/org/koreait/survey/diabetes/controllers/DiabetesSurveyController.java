@@ -4,8 +4,12 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.koreait.global.constants.Gender;
 import org.koreait.global.libs.Utils;
+import org.koreait.global.search.CommonSearch;
+import org.koreait.global.search.ListData;
 import org.koreait.survey.diabetes.constants.SmokingHistory;
+import org.koreait.survey.diabetes.services.DiabetesSurveyInfoService;
 import org.koreait.survey.diabetes.services.DiabetesSurveyService;
+import org.koreait.survey.entities.DiabetesSurvey;
 import org.koreait.survey.validators.DiabetesSurveyValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,6 +29,7 @@ public class DiabetesSurveyController {
     private final Utils utils;
     private final DiabetesSurveyValidator validator;
     private final DiabetesSurveyService service;
+    private final DiabetesSurveyInfoService infoService;
 
     @ModelAttribute("addCss")
     public List<String> addCss() {
@@ -94,12 +99,15 @@ public class DiabetesSurveyController {
         }
 
         // 설문 결과 및 저장 처리 (DB)
-        service.process(form);
+        DiabetesSurvey item = service.process(form);
 
         // 세션에 바인딩된 모델(@SessionAttributes)을 더 이상 유지하지 않도록 제거
         status.setComplete();
 
-        return "redirect:/survey/diabetes/result/설문번호";
+        // 양식데이터 초기화
+        model.addAttribute("requestDiabetesSurvey", requestDiabetesSurvey());
+
+        return "redirect:/survey/diabetes/result/" + item.getSeq();
     }
 
     /**
@@ -111,6 +119,12 @@ public class DiabetesSurveyController {
     @GetMapping("/result/{seq}")
     public String result(@PathVariable("seq") Long seq, Model model) {
         commonProcess("result", model);
+
+        DiabetesSurvey item = infoService.get(seq);
+        model.addAttribute(item);
+
+        ListData<DiabetesSurvey> data = infoService.getList(new CommonSearch());
+        System.out.println("data: " + data);
 
         return utils.tpl("survey/diabetes/result");
     }
