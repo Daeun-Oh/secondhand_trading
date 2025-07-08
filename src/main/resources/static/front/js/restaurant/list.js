@@ -1,18 +1,20 @@
 window.addEventListener("DOMContentLoaded", function() {
-    const { mapLib } = commonLib; // commonLib에서 mapLib을 사용, {}: 비교할당자
-
     const el = document.getElementById("map");
 
     // 현재 위치의 식당 정보 조회
-    navigator.geolocation.getCurrentPosition((pos) => {
-        const { latitude: lat, longitude: lon } = pos.coords;
+    commonLib.mapLib.init(() => {
+        navigator.geolocation.getCurrentPosition((pos) => {
+            const { latitude: lat, longitude: lon } = pos.coords;
+            const center = { lat, lon };
 
-        fetch(`/restaurant/search?lat=${lat}&{lon}=${lon}&cnt=50`)
+            fetch(`/restaurant/search?lat=${lat}&lon=${lon}&cnt=50`)
                 .then((res) => res.json())
                 .then(items => {
-                    mapLib.
+                    commonLib.mapLib.load(el, items, center, "100%", "350px");
+                })
+                .catch(err => {
+                    console.error("식당 정보 불러오기 실패:", err);
                 });
+        });
     });
-
-    mapLib.load(el);
 });

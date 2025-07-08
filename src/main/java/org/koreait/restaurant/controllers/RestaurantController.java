@@ -31,6 +31,15 @@ public class RestaurantController {
     public String list(Model model) {
         commonProcess("list", model);
 
+        try {
+            List<Restaurant> items = repository.findAll().subList(0, 10); // 또는 조건 추가
+            String json = om.writeValueAsString(items);
+            model.addAttribute("json", json);
+        } catch (Exception e) {
+            model.addAttribute("json", "[]");
+            e.printStackTrace();
+        }
+
         return utils.tpl("restaurant/list");
     }
 
@@ -60,18 +69,18 @@ public class RestaurantController {
         String pageTitle = "";
         List<String> addCss = new ArrayList<>();
         List<String> addScript = new ArrayList<>();
-        List<String> addCommonScript = new ArrayList<>();
+//        List<String> addCommonScript = new ArrayList<>();
 
         if (mode.equals("list")) {
             pageTitle = utils.getMessage("오늘의 식당");
             addCss.add("restaurant/list");
             addScript.add("restaurant/list");
-            addCommonScript.add("map");
+            addScript.add("restaurant/map");
         }
 
         model.addAttribute("pageTitle", pageTitle);
         model.addAttribute("addCss", addCss);
         model.addAttribute("addScript", addScript);
-        model.addAttribute("addCommonScript", addCommonScript);
+//        model.addAttribute("addCommonScript", addCommonScript);
     }
 }

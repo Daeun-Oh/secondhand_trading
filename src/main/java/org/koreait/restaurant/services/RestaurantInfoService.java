@@ -53,7 +53,7 @@ public class RestaurantInfoService {
         }
 
         try {
-            ProcessBuilder builder = new ProcessBuilder(activationCommand); // 가상환경 활성화
+            ProcessBuilder builder = isProduction ? new ProcessBuilder("/bin/sh", activationCommand) : new ProcessBuilder(activationCommand); // 가상환경 활성화
             Process process = builder.start();
             if (process.waitFor() == 0) { // 정상 수행된 경우
                 builder = new ProcessBuilder(pythonPath, properties.getRestaurant() + "/search.py", "" + lat, "" + lon, "" + cnt);
