@@ -7,6 +7,7 @@
 
             </div>
             <div class="right">
+                <a th:href="@{/restaurant}" th:text="#{식당}">식당</a>
                 <th:block th:if="${isLogin}">
                     <a th:href="@{/mypage}" th:text="${#messages.msg('LOGIN_MSG', loggedMember.name, loggedMember.email)}"></a>
                     <a th:href="@{/mypage}" th:text="#{마이페이지}"></a>

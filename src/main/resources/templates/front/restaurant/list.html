@@ -3,12 +3,11 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{front/layouts/main}">
 
-<th:block layout:fragment="addCommonScript">
-</th:block>
-
 <main layout:fragment="content">
     <h1 th:text="${pageTitle}"></h1>
 
-    <div id="map" style="width:100%;height:350%"></div>
+    <div id="map" style="width:100%;height:350px;"></div>
+
+    <script type="application/json" th:utext="${json}"></script>
 </main>
 </html>
