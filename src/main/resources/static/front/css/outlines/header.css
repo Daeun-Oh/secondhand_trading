@@ -26,7 +26,7 @@ header .left {
   color: #0d6efd;
 }
 
-/* 우측 로그인/로그아웃 링크 */
+/* 우측  링크 */
 header .right a {
   margin-left: 16px;
   text-decoration: none;
@@ -54,4 +54,13 @@ header .right a::after {
 
 header .right a:hover::after {
   width: 100%;
+}
+
+header .right a.active {
+  color: #0d6efd; /* hover와 동일한 색상 */
+}
+
+header .right a.active::after {
+  width: 100%;
+  background-color: #0d6efd; /* 밑줄 색상 */
 }

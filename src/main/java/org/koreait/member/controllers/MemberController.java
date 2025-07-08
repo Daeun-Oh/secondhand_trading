@@ -1,5 +1,6 @@
 package org.koreait.member.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.koreait.global.libs.Utils;
@@ -21,6 +22,7 @@ import java.util.List;
 @SessionAttributes("requestLogin")
 public class MemberController {
 
+    private final HttpServletRequest request;
     private final Utils utils;
     private final JoinValidator joinValidator;
     private final JoinService joinService;
@@ -117,6 +119,7 @@ public class MemberController {
             pageTitle = utils.getMessage("로그인");
         }
 
+        model.addAttribute("requestURI", request.getRequestURI());
         model.addAttribute("addCommonScript", addCommonScript);
         model.addAttribute("addScript", addScript);
         model.addAttribute("pageTitle", pageTitle);

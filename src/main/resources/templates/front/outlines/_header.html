@@ -7,16 +7,24 @@
 
             </div>
             <div class="right">
-                <a th:href="@{/restaurant}" th:text="#{식당}">식당</a>
+                <a th:href="@{/restaurant}"
+                   th:classappend="${requestURI == '/restaurant'} ? 'active'"
+                   th:text="#{식당}">식당</a>
                 <th:block th:if="${isLogin}">
                     <a th:href="@{/mypage}" th:text="${#messages.msg('LOGIN_MSG', loggedMember.name, loggedMember.email)}"></a>
-                    <a th:href="@{/mypage}" th:text="#{마이페이지}"></a>
+                    <a th:href="@{/mypage}"
+                       th:classappend="${requestURI == '/mypage'} ? 'active'"
+                       th:text="#{마이페이지}">마이페이지</a>
                     <a th:href="@{/logout}" th:text="#{로그아웃}"></a>
                     <a sec:authorize="hasAnyAuthority('ADMIN')" th:href="@{/admin}" th:text="#{사이트_관리}"></a>
                 </th:block>
                 <th:block th:unless="${isLogin}">
-                    <a th:href="@{/member/join}" th:text="#{회원가입}"></a>
-                    <a th:href="@{/member/login}" th:text="#{로그인}"></a>
+                    <a th:href="@{/member/join}"
+                       th:classappend="${requestURI == '/member/join'} ? 'active'"
+                       th:text="#{회원가입}"></a>
+                    <a th:href="@{/member/login}"
+                       th:classappend="${requestURI == '/member/login'} ? 'active'"
+                       th:text="#{로그인}">로그인</a>
                 </th:block>
             </div>
         </div>

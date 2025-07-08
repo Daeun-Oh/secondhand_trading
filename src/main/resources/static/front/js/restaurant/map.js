@@ -127,7 +127,7 @@ window.addEventListener("DOMContentLoaded", function() {
             // 예: 빈 배열로 표시 (나중에 실제 데이터 fetch로 대체)
             const items = [];
 
-            commonLib.mapLib.load(el, items, {lat, lon}, "100%", "350px");
+            commonLib.mapLib.load(el, items, {lat, lon}, "100%", "500px");
         });
     });
 });

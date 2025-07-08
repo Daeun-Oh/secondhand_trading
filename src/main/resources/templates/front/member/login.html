@@ -3,7 +3,6 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{front/layouts/main}">
     <main layout:fragment="content">
-        <h1 th:text="${pageTitle}"></h1>
         <form name="frmLogin" method="post" th:action="@{/member/login}" autocomplete="off" th:object="${requestLogin}">
             <ul>
                 <li>
@@ -15,19 +14,16 @@
                     <div class="error" th:each="err : ${#fields.errors('password')}"></div>
                 </li>
                 <li>
-                    <div class="left">
-                        <input type="checkbox" name="autoLogin" value="true" th:field="*{autoLogin}" id="auto-login">
-                        <label for="auto-login" th:text="#{자동_로그인}"></label>
-                    </div>
-                    <div class="right">
-                        <a th:href="@{/member/findid}" th:text="#{아이디_비밀번호_찾기+}"></a>
-                    </div>
+                    <input type="checkbox" name="autoLogin" value="true" th:field="*{autoLogin}" id="auto-login">
+                    <label for="auto-login" th:text="#{자동_로그인}"></label>
                 </li>
             </ul>
             <button type="submit" th:text="#{로그인}"></button>
             <div class="error global" th:each="err : ${#fields.globalErrors()}" th:text="${err}"></div>
-
-            <a th:href="@{/member/join}" th:text="#{회원가입}"></a>
+            <div class="links">
+                <a th:href="@{/member/findid}" th:text="#{아이디_비밀번호_찾기}"></a>
+                <a th:href="@{/member/join}" th:text="#{회원가입}"></a>
+            </div>
         </form>
     </main>
 </html>

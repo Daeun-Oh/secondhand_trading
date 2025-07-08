@@ -1,5 +1,6 @@
 package org.koreait.survey.diabetes.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.koreait.global.constants.Gender;
@@ -26,6 +27,7 @@ import java.util.List;
 @SessionAttributes("requestDiabetesSurvey")
 public class DiabetesSurveyController {
 
+    private final HttpServletRequest request;
     private final Utils utils;
     private final DiabetesSurveyValidator validator;
     private final DiabetesSurveyService service;
@@ -144,6 +146,7 @@ public class DiabetesSurveyController {
             pageTitle = utils.getMessage("당뇨_고위험군_테스트_결과");
         }
 
+        model.addAttribute("requestURI", request.getRequestURI());
         model.addAttribute("pageTitle", pageTitle);
 
     }

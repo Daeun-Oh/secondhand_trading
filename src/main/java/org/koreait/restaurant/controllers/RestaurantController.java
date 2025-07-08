@@ -1,6 +1,7 @@
 package org.koreait.restaurant.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.koreait.global.libs.Utils;
 import org.koreait.restaurant.entities.Restaurant;
@@ -9,10 +10,7 @@ import org.koreait.restaurant.services.RestaurantInfoService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,19 +20,32 @@ import java.util.List;
 @RequestMapping("/restaurant")
 public class RestaurantController {
 
+    private final HttpServletRequest request;
     private final RestaurantRepository repository;
     private final RestaurantInfoService infoService;
     private final ObjectMapper om;
     private final Utils utils;
 
     @GetMapping({"", "/list"})
-    public String list(Model model) {
+    public String list(@RequestParam(required = false) String search, Model model) {
         commonProcess("list", model);
 
         try {
-            List<Restaurant> items = repository.findAll().subList(0, 10); // 또는 조건 추가
+            List<Restaurant> items;
+
+            System.out.println("search: " + search);
+
+            if (search != null && !search.isBlank()) {
+                items = repository.findByNameContainingIgnoreCase(search); // 예: 이름으로 검색
+                System.out.println("items: " + items);
+            } else {
+                items = repository.findAll().subList(0, 10);
+                System.out.println("items(기본): " + items);
+            }
+
             String json = om.writeValueAsString(items);
             model.addAttribute("json", json);
+            model.addAttribute("search", search); // 검색어 유지
         } catch (Exception e) {
             model.addAttribute("json", "[]");
             e.printStackTrace();
@@ -78,6 +89,7 @@ public class RestaurantController {
             addScript.add("restaurant/map");
         }
 
+        model.addAttribute("requestURI", request.getRequestURI());
         model.addAttribute("pageTitle", pageTitle);
         model.addAttribute("addCss", addCss);
         model.addAttribute("addScript", addScript);
