@@ -1,0 +1,139 @@
+/* ======== 스타일 초기화 ======== */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Noto Sans KR', sans-serif;
+  background-color: #f5f6fa;
+  color: #222;
+}
+
+ul, li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+input, button, textarea {
+  font-family: inherit;
+  font-size: 100%;
+  border: none;
+  outline: none;
+  background: none;
+}
+
+button {
+  cursor: pointer;
+}
+
+::placeholder {
+  color: #aaa;
+}
+
+
+/* ======== 회원가입 스타일 ======== */
+
+/* 폼 전체 감싸는 영역 */
+form[name="frmJoin"] {
+  max-width: 480px;
+  margin: 80px auto;
+  padding: 40px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* 제목 */
+main h1 {
+  text-align: center;
+  font-size: 28px;
+  margin-bottom: 32px;
+  color: #333;
+}
+
+/* 필드 그룹 */
+form[name="frmJoin"] ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px;
+}
+
+form[name="frmJoin"] li {
+  margin-bottom: 18px;
+}
+
+/* 입력창 */
+form[name="frmJoin"] input[type="text"],
+form[name="frmJoin"] input[type="password"] {
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  transition: border-color 0.3s ease;
+}
+
+form[name="frmJoin"] input:focus {
+  outline: none;
+  border-color: #0d6efd;
+}
+
+/* 에러 메시지 */
+.error {
+  color: #d93025;
+  font-size: 13px;
+  margin-top: 6px;
+}
+
+/* 약관 영역 */
+h3 {
+  font-size: 18px;
+  margin: 32px 0 10px;
+  color: #444;
+}
+
+.terms {
+  background: #f8f9fa;
+  padding: 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+
+/* 약관 체크박스 */
+input[type="checkbox"] {
+  margin-right: 6px;
+  transform: scale(1.2);
+}
+
+label[for="terms-agree"] {
+  font-size: 15px;
+  color: #333;
+}
+
+/* 가입 버튼 */
+form[name="frmJoin"] button[type="submit"] {
+  width: 100%;
+  margin-top: 24px;
+  padding: 14px;
+  background-color: #0d6efd;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+form[name="frmJoin"] button[type="submit"]:hover {
+  background-color: #0b5ed7;
+}
