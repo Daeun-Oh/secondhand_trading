@@ -61,7 +61,7 @@ public class DiabetesSurveyController {
         return SmokingHistory.values();
     }
 
-    @GetMapping({"/", "/main"})
+    @GetMapping({"", "/"})
     public String main(Model model) {
         commonProcess("main", model);
 
@@ -130,7 +130,7 @@ public class DiabetesSurveyController {
         commonProcess("result", model);
 
         DiabetesSurvey item = infoService.get(seq);
-        model.addAttribute(item);
+        model.addAttribute("item", item);
 
         ListData<DiabetesSurvey> data = infoService.getList(new CommonSearch());
         System.out.println("data: " + data);

@@ -1,0 +1,109 @@
+/* 메인 페이지 */
+.start-button {
+  display: inline-block;
+  padding: 12px 24px;
+  background-color: #4CAF50;  /* 녹색 */
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+  margin-top: 20px;
+}
+
+.start-button:hover {
+  background-color: #45a049;
+}
+
+/* 기본 리셋 및 폰트 */
+body {
+  font-family: "Segoe UI", "Helvetica Neue", sans-serif;
+  background-color: #f9f9f9;
+  margin: 0;
+  padding: 20px;
+}
+
+main {
+  max-width: 600px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  padding: 30px;
+}
+
+/* 제목 */
+h1 {
+  font-size: 24px;
+  margin-bottom: 30px;
+  color: #333;
+  text-align: center;
+}
+
+/* 항목 그룹 */
+dl {
+  margin-bottom: 25px;
+}
+
+dt {
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #444;
+}
+
+dd {
+  margin-left: 0;
+}
+
+/* 입력 필드 */
+input[type="number"] {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  width: 120px;
+  margin-right: 8px;
+  box-sizing: border-box;
+}
+
+/* 에러 메시지 */
+.error {
+  color: #e53935;
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+.error.global {
+  background-color: #ffe6e6;
+  border: 1px solid #e53935;
+  padding: 10px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+}
+
+/* 버튼 그룹 */
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+}
+
+.btn {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 16px;
+  text-align: center;
+  background-color: #4CAF50;
+  color: #fff;
+  text-decoration: none;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+  background-color: #45a049;
+}
+

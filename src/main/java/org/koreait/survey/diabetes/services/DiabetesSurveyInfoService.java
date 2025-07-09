@@ -45,7 +45,7 @@ public class DiabetesSurveyInfoService {
             DiabetesSurvey item = jdbcTemplate.queryForObject(sql, this::mapper, seq);
 
             Member member = memberUtil.getMember(); // 로그인한 회원 정보
-            if (!memberUtil.isLogin() || (!memberUtil.isAdmin() && !member.getSeq().equals(item.getSeq()))) {
+            if (!memberUtil.isLogin() || (!memberUtil.isAdmin() && !member.getSeq().equals(item.getMemberSeq()))) {
                 // 로그인 상태가 아니거나, 일반 회원(관리자X)이면서 설문지 작성한 회원과 일치하지 않을 때
                 throw new UnAuthorizedException();
             }
@@ -100,6 +100,8 @@ public class DiabetesSurveyInfoService {
         item.setHbA1c(rs.getDouble("hbA1c"));
         item.setBloodGlucoseLevel(rs.getDouble("bloodGlucoseLevel"));
         item.setSmokingHistory(SmokingHistory.valueOf(rs.getString("smokingHistory")));
+
+        item.setCreatedAt(rs.getTimestamp("createdAt").toLocalDateTime());
 
         Member member = new Member();
         member.setSeq(rs.getLong("memberSeq"));

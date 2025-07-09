@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{front/layouts/main}">
+
+<main layout:fragment="content">
+    <h1 th:text="${pageTitle}"></h1>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th th:text="#{성별}"></th>
+            <th th:text="#{나이}"></th>
+            <th th:text="#{당뇨_위험_수준}"></th>
+            <th th:text="#{설문_일시}"></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item, iterStat : ${data.items}">
+            <td th:text="${iterStat.count}"></td>
+            <td th:text="#{${item.gender}}"></td>
+            <td th:text="${item.age}"></td>
+            <td th:text="${item.diabetes} ? #{diabetes.HIGH.s} : #{diabetes.LOW.s}"></td>
+            <td th:text="${#temporals.format(item.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
+            <td>
+                <a th:href="@{/survey/diabetes/result/{seq}(seq=${item.seq})}" th:text="#{상세보기}"></a>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(data.items)}">
+            <td colspan="7" class="text-center">표시할 설문이 없습니다.</td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+</html>
