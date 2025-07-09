@@ -61,6 +61,13 @@ public class DiabetesSurveyController {
         return SmokingHistory.values();
     }
 
+    @GetMapping({"/", "/main"})
+    public String main(Model model) {
+        commonProcess("main", model);
+
+        return utils.tpl("survey/diabetes/main");
+    }
+
     @GetMapping("/step1")
     public String step1(@ModelAttribute RequestDiabetesSurvey form, Model model) {
         commonProcess("step", model);
@@ -140,7 +147,7 @@ public class DiabetesSurveyController {
     private void commonProcess(String mode, Model model) {
         mode = StringUtils.hasText(mode) ? mode : "step";  // 기본값 설정
         String pageTitle = "";
-        if (mode.equals("step")) {
+        if (mode.equals("main") || mode.equals("step")) {
             pageTitle = utils.getMessage("당뇨_고위험군_테스트");
         } else if (mode.equals("result")) {
             pageTitle = utils.getMessage("당뇨_고위험군_테스트_결과");
