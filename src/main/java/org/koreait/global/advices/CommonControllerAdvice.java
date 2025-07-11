@@ -2,6 +2,7 @@ package org.koreait.global.advices;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.koreait.global.annotations.ApplyCommonController;
 import org.koreait.global.exceptions.CommonException;
 import org.koreait.global.exceptions.script.AlertBackException;
 import org.koreait.global.exceptions.script.AlertException;
@@ -15,7 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.HashMap;
 import java.util.Map;
 
-@ControllerAdvice("org.koreait")
+@ControllerAdvice(annotations = ApplyCommonController.class)
 @RequiredArgsConstructor
 public class CommonControllerAdvice {
 

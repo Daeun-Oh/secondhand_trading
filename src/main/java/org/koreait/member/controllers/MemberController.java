@@ -3,6 +3,7 @@ package org.koreait.member.controllers;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.koreait.global.annotations.ApplyCommonController;
 import org.koreait.global.libs.Utils;
 import org.koreait.member.libs.MemberUtil;
 import org.koreait.member.services.JoinService;
@@ -18,6 +19,7 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
+@ApplyCommonController
 @RequestMapping("/member")
 @SessionAttributes("requestLogin")
 public class MemberController {

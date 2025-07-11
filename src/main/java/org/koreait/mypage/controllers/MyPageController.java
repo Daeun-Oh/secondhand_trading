@@ -2,6 +2,7 @@ package org.koreait.mypage.controllers;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.koreait.global.annotations.ApplyCommonController;
 import org.koreait.global.libs.Utils;
 import org.koreait.global.search.CommonSearch;
 import org.koreait.global.search.ListData;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
+@ApplyCommonController
 @RequestMapping("/mypage")
 @RequiredArgsConstructor
 public class MyPageController {
