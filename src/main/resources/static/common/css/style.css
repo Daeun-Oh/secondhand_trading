@@ -5,3 +5,13 @@
 .flex {
     display: flex;
 }
+
+:root {
+  --primary-color: #98768E;
+  --primary-dark-color: #85617a;
+  --primary-light-color: #e3cfdd;
+  --secondary-color: #D3B8C5;
+  --danger-color: #dc3545;
+  --light-color: #F6D4CF;
+  --dark-color: #333;
+}

@@ -3,13 +3,18 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{front/layouts/main}">
 
+<th:block layout:fragment="addErrorCss">
+  <link rel="stylesheet" type="text/css"
+        th:href="@{/front/css/error/error.css?v=(v=${@utils.version()})}">
+</th:block>
+
 <th:block layout:fragment="addCommonCss">
   <link rel="stylesheet" type="text/css" th:href="@{/common/css/error.css?v=(v=${@utils.version()})}">
 </th:block>
 
 <main layout:fragment="content" class="error-page">
   <!-- 에러 이미지 출력 -->
-  <img th:src="@{/images/error.jpg}" alt="에러 이미지" class="error-image">
+  <img th:src="@{/image/404.jpg}" alt="에러 이미지" class="error-image">
 
   <th:block th:replace="~{error/_content::common}"></th:block>
 </main>

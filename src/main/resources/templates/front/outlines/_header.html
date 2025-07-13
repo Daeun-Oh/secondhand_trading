@@ -15,9 +15,9 @@
             </div>
             <div class="right">
                 <th:block th:if="${isLogin}">
-                    <a th:href="@{/mypage}" th:text="${#messages.msg('LOGIN_MSG', loggedMember.name, loggedMember.email)}"></a>
-                    <a th:href="@{/mypage}"
-                       th:classappend="${requestURI == '/mypage'} ? 'active'"
+                    <span th:text="${#messages.msg('LOGIN_MSG', loggedMember.name, loggedMember.email)}"></span>
+                    <a th:href="@{/mypage/survey/diabetes}"
+                       th:classappend="${requestURI == '/mypage/survey/diabetes'} ? 'active'"
                        th:text="#{마이페이지}"></a>
                     <a th:href="@{/logout}" th:text="#{로그아웃}"></a>
                     <a sec:authorize="hasAnyAuthority('ADMIN')" th:href="@{/admin}" th:text="#{사이트_관리}"></a>

@@ -23,6 +23,8 @@
     <link rel="stylesheet" type="text/css"
           th:href="@{/front/css/mypage/survey/diabetes/list.css?v={v}(v=${@utils.version()})}">
 
+    <th:block layout:fragment="addErrorCss"></th:block>
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script th:src="@{/common/js/common.js?v={v}(v=${@utils.version()})}"></script>
     <script th:each="jsFile : ${addCommonScript}" th:src="@{/common/js/{js}.js?v={v}(js=${jsFile}, v=${@utils.version()})}"></script>

@@ -11,7 +11,7 @@
                 </li>
                 <li>
                     <input type="password" name="password" th:field="*{password}" th:placeholder="#{비밀번호}">
-                    <div class="error" th:each="err : ${#fields.errors('password')}"></div>
+                    <div class="error" th:each="err : ${#fields.errors('password')}" th:text="${err}"></div>
                 </li>
                 <li>
                     <input type="checkbox" name="autoLogin" value="true" th:field="*{autoLogin}" id="auto-login">

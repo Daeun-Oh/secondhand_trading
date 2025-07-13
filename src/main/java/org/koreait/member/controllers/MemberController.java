@@ -1,6 +1,7 @@
 package org.koreait.member.controllers;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.koreait.global.annotations.ApplyCommonController;
@@ -68,6 +69,10 @@ public class MemberController {
     @GetMapping("/login")
     public String login(@ModelAttribute RequestLogin form, Errors errors, Model model) {
         commonProcess("login", model);
+
+        HttpSession session = request.getSession();
+        RequestLogin savedForm = (RequestLogin) session.getAttribute("requestLogin");
+        session.removeAttribute("requestLogin"); // 세션 제거 (한번만 쓰기 위해)
 
         /* 검증 실패 처리 S */
         List<String> fieldErrors = form.getFieldErrors();

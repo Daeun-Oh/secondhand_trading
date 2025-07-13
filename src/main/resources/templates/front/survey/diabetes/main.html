@@ -3,7 +3,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{front/layouts/main}">
 
-<main layout:fragment="content">
+<main layout:fragment="content" class="diabetes-main">
     <h1>당뇨병 진단 설문</h1>
     <a th:href="@{/survey/diabetes/step1}"
        th:text="#{시작하기}"

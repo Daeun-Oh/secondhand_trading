@@ -30,15 +30,24 @@ header .center {
 header a{
   margin-left: 16px;
   text-decoration: none;
-  color: #333;
+  color: var(--dark-color);
   font-size: 15px;
   font-weight: 500;
   position: relative;
   transition: color 0.3s ease;
 }
 
+header span{
+    margin-left: 16px;
+    text-decoration: none;
+    color: var(--dark-color);
+    font-size: 15px;
+    font-weight: 500;
+    position: relative;
+}
+
 header a:hover {
-  color: #0d6efd;
+  color: var(--primary-color);
 }
 
 header a::after {
@@ -48,7 +57,7 @@ header a::after {
   bottom: -4px;
   width: 0%;
   height: 2px;
-  background-color: #0d6efd;
+  background-color: var(--primary-color);
   transition: width 0.3s ease;
 }
 
@@ -57,10 +66,10 @@ header a:hover::after {
 }
 
 header a.active {
-  color: #0d6efd; /* hover와 동일한 색상 */
+  color: var(--primary-color);
 }
 
 header a.active::after {
   width: 100%;
-  background-color: #0d6efd; /* 밑줄 색상 */
+  background-color: var(--primary-color);
 }

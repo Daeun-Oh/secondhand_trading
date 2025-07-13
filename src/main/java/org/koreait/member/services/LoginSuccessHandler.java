@@ -28,6 +28,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 
         session.removeAttribute("requestLogin");
 
-        response.sendRedirect(request.getContextPath() + url);
+        if (!url.equals("/")) response.sendRedirect(request.getContextPath() + url);
+        else response.sendRedirect(request.getContextPath() + "/mypage/survey/diabetes");
     }
 }

@@ -58,7 +58,7 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
             }
 
             if (fieldErrors.isEmpty()) {  // 필수 항목은 다 있지만 이메일 또는 비밀번호가 일치하지 X
-
+                globalErrors.add("Mismatch.email.password"); // 이 부분 추가!
             }
         }
 
