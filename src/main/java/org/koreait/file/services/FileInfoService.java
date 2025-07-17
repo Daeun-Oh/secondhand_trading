@@ -1,20 +1,18 @@
 package org.koreait.file.services;
 
+import com.querydsl.core.BooleanBuilder;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.koreait.file.constants.FileStatus;
 import org.koreait.file.entities.FileInfo;
+import org.koreait.file.entities.QFileInfo;
 import org.koreait.file.exceptions.FileNotFoundException;
 import org.koreait.file.repositories.FileInfoRepository;
 import org.koreait.global.configs.FileProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -23,7 +21,6 @@ import java.util.Objects;
 @EnableConfigurationProperties(FileProperties.class)
 public class FileInfoService {
     private final FileInfoRepository repository;
-    private final JdbcTemplate jdbcTemplate;
     private final HttpServletRequest request;
     private final FileProperties properties;
 
@@ -52,24 +49,20 @@ public class FileInfoService {
     public List<FileInfo> getList(String gid, String location, FileStatus status) {
         status = Objects.requireNonNullElse(status, FileStatus.ALL);
 
-        List<Object> params = new ArrayList<>();
-        StringBuffer sb = new StringBuffer(2000);
-        sb.append("SELECT * FROM FILE_INFO WHERE gid=?");
-        params.add(gid);
+        QFileInfo fileInfo = QFileInfo.fileInfo;
+        BooleanBuilder andBuilder = new BooleanBuilder();
+        andBuilder.and(fileInfo.gid.eq(gid));
 
         if (StringUtils.hasText(location)) {
-            sb.append(" AND location=?");
-            params.add(location);
+            andBuilder.and(fileInfo.location.eq(location));
         }
 
         if (status != FileStatus.ALL) {
-            sb.append(" AND done=?");
-            params.add(status == FileStatus.DONE);
+            andBuilder.and(fileInfo.done.eq(status == FileStatus.DONE));
         }
 
-        sb.append(" ORDER BY createdAt DESC");
-        List<FileInfo> items = jdbcTemplate.query(sb.toString(), this::mapper, params.toArray());
-        
+        List<FileInfo> items = (List<FileInfo>)repository.findAll(andBuilder, fileInfo.createdAt.asc());
+
         // 추가정보공통 처리
         items.forEach(this::addInfo);
 
@@ -82,21 +75,6 @@ public class FileInfoService {
 
     public List<FileInfo> getList(String gid) {
         return getList(gid, null);
-    }
-
-    private FileInfo mapper(ResultSet rs, int i) throws SQLException {
-        FileInfo item = new FileInfo();
-        item.setSeq(rs.getLong("seq"));
-        item.setGid(rs.getString("gid"));
-        item.setLocation(rs.getString("location"));
-        item.setFileName(rs.getString("fileName"));
-        item.setContentType(rs.getString("contentType"));
-        item.setCreatedBy(rs.getString("createdBy"));
-        item.setExtension(rs.getString("extension"));
-        item.setCreatedAt(rs.getTimestamp("createdAt").toLocalDateTime());
-
-        return item;
-
     }
 
     /**

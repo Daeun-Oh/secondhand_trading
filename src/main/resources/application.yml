@@ -4,17 +4,22 @@ server:
     session.cookie.name: b8a5f3fb
 
 spring:
-  # flyway 설정
-  flyway:
-    enabled: true
-    baselineOnMigrate: true
-
   # 데이터베이스 설정
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://${db.url}
     username: ${db.username}
     password: ${db.password}
+
+  # JPA 및 Hibernate 설정
+  jpa:
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        use_sql_comments: true
+    hibernate:
+      ddlAuto: ${ddl.auto}
 
   # 타임리프 설정
   thymeleaf:
@@ -28,10 +33,11 @@ spring:
       maxRequestSize: 60MB
       fileSizeThreshold: 30MB
 
-# 로깅 설정
+# 로거 설정 - SQL 로그를 자세히 출력 (바인딩 값까지)
 logging:
   level:
-    org.springframework.jdbc: TRACE
+    org.hibernate.type: trace
+    org.hibernate.orm.jdbc.bind: trace
 
 # 파일 업로드 경로 설정
 file:

@@ -1,34 +1,30 @@
 package org.koreait.survey.entities;
 
+import jakarta.persistence.*;
 import lombok.Data;
 import org.koreait.global.constants.Gender;
 import org.koreait.global.entities.BaseEntity;
 import org.koreait.member.entities.Member;
 import org.koreait.survey.diabetes.constants.SmokingHistory;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
-import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.Table;
 
 @Data
-@Table("SURVEY_DIABETES")
+@Entity
 public class DiabetesSurvey extends BaseEntity {
     @Id
+    @GeneratedValue
     private Long seq;
 
-    @Column("memberSeq")
-    private Long memberSeq;
-
+    @Enumerated(EnumType.STRING)
     private Gender gender;
 
     private int age;
 
     private boolean hypertension;
 
-    @Column("heartDisease")
     private boolean heartDisease;
 
-    @Column("smokingHistory")
+    @Enumerated(EnumType.STRING)
     private SmokingHistory smokingHistory;
 
     private double height;
@@ -37,18 +33,14 @@ public class DiabetesSurvey extends BaseEntity {
 
     private double bmi;
 
-    @Column("hbA1c")
     private double hbA1c;
 
-    @Column("bloodGlucoseLevel")
     private double bloodGlucoseLevel;
 
     private boolean diabetes;
 
-    @Column("trainDone")
     private boolean trainDone;
 
-    // member는 2차 가공으로 쓰겠다. (좋은 방법은 아님)
-    @Transient // 의미: DB와 상관 없이 쓰겠다.
+    @ManyToMany(fetch = FetchType.LAZY)
     private Member member;
 }

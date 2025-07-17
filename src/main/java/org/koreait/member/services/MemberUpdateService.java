@@ -52,6 +52,6 @@ public class MemberUpdateService {
 
             members.add(member);
         }
-        repository.saveAll(members);
+        repository.saveAllAndFlush(members);
     }
 }
