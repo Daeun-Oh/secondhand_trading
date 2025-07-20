@@ -1,4 +1,4 @@
-package org.koreait.survey.entities;
+package org.koreait.survey.diabetes.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -6,7 +6,6 @@ import org.koreait.global.constants.Gender;
 import org.koreait.global.entities.BaseEntity;
 import org.koreait.member.entities.Member;
 import org.koreait.survey.diabetes.constants.SmokingHistory;
-import org.springframework.data.annotation.Id;
 
 @Data
 @Entity
@@ -41,6 +40,6 @@ public class DiabetesSurvey extends BaseEntity {
 
     private boolean trainDone;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 }

@@ -7,7 +7,7 @@ import org.koreait.global.libs.Utils;
 import org.koreait.global.search.CommonSearch;
 import org.koreait.global.search.ListData;
 import org.koreait.survey.diabetes.services.DiabetesSurveyInfoService;
-import org.koreait.survey.entities.DiabetesSurvey;
+import org.koreait.survey.diabetes.entities.DiabetesSurvey;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;

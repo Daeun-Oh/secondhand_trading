@@ -5,7 +5,6 @@ import lombok.Data;
 import org.koreait.file.entities.FileInfo;
 import org.koreait.global.entities.BaseEntity;
 import org.koreait.product.constants.ProductStatus;
-import org.springframework.data.annotation.Id;
 
 import java.util.List;
 

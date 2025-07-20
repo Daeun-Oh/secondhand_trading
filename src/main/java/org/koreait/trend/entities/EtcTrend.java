@@ -6,7 +6,7 @@ import org.koreait.global.entities.BaseEntity;
 
 @Data
 @Entity
-public class Trend extends BaseEntity {
+public class EtcTrend extends BaseEntity {
     @Id
     @GeneratedValue
     private Long seq;

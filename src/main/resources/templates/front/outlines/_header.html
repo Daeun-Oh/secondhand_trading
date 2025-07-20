@@ -6,7 +6,7 @@
             <div class="left">
                 <th:block th:if="${isLogin}">
                     <a th:href="@{/survey/diabetes}"
-                       th:classappend="${requestURI.startsWith('/survey/diabetes')} ? 'active'"
+                       th:classappend="${requestURI != null and requestURI.startsWith('/survey/diabetes')} ? 'active'"
                        th:text="#{당뇨_진단}"></a>
                     <a th:href="@{/restaurant}"
                        th:classappend="${requestURI == '/restaurant'} ? 'active'"

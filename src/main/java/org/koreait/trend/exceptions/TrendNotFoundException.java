@@ -1,4 +1,4 @@
-package org.koreait.trend.exceiptions;
+package org.koreait.trend.exceptions;
 
 import org.koreait.global.exceptions.NotFoundException;
 

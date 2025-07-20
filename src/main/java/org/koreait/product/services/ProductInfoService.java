@@ -16,7 +16,10 @@ import org.koreait.product.exceptions.ProductNotFoundException;
 import org.koreait.product.repositories.ProductRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -24,9 +27,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static org.springframework.data.domain.Sort.Order.desc;
 
 @Lazy
 @Service
@@ -116,88 +119,14 @@ public class ProductInfoService {
         }
         /* 판매가, 소비자가 검색 처리 E */
 
-//        String sql = "SELECT * FROM PRODUCT";
-//        String countSql = "SELECT COUNT(*) FROM PRODUCT";
-//
-//        List<Object> params = new ArrayList<>();
-//
-//        StringBuffer sb1 = new StringBuffer(5000);
-//        StringBuffer sb2 = new StringBuffer(5000);
-//        sb1.append(sql);
-//        sb2.append(countSql);
-//
-//        List<String> arrWhere = new ArrayList<>();
-//        arrWhere.add("deletedAt IS NULL");
-//
-//        /* 상품 등록일자 검색 처리 S */
-//        if (sDate != null) {
-//            arrWhere.add("createdAt >= ?");
-//            params.add(sDate.atStartOfDay());
-//        }
-//
-//        if (eDate != null) {
-//            arrWhere.add("createdAt <= ?");
-//            params.add(eDate.atTime(23, 59, 59));
-//        }
-//
-//        /* 상품 등록일자 검색 처리 E */
-//
-//        /* 키워드 검색 처리 S */
-//        sopt = StringUtils.hasText(sopt) ? sopt.toUpperCase() : "ALL";
-//        if (StringUtils.hasText(skey)) {
-//            skey = skey.trim();
-//
-//            // 상품명으로 검색
-//            String conds = null;
-//            if (sopt.equals("NAME")) {
-//                conds = "name LIKE ?";
-//            } else if (sopt.equals("DESCRIPTION")) { // 상세 설명
-//                conds = "description LIKE ?";
-//            } else { // 통합검색
-//                conds = "CONCAT(name, description) LIKE ?";
-//            }
-//            arrWhere.add(conds);
-//            params.add("%" + skey + "%");
-//        }
-//        /* 키워드 검색 처리 E */
-//
-//        // 판매가, 소비자가 검색 처리 S
-//        Integer sPrice = search.getSPrice();
-//        Integer ePrice = search.getEPrice();
-//        if (sPrice != null) {
-//            arrWhere.add("(salePrice >= ? OR consumerPrice >= ?)");
-//            params.add(sPrice);
-//        }
-//
-//        if (ePrice != null) {
-//            arrWhere.add("(salePrice <= ? OR consumerPrice <= ?)");
-//            params.add(ePrice);
-//        }
-//        // 판매가, 소비자가 검색 처리 E
-//
-//        if (!arrWhere.isEmpty()) {
-//            String where = " WHERE " + arrWhere.stream().collect(Collectors.joining(" AND "));
-//            sb1.append(where);
-//            sb2.append(where);
-//        }
-//
-//        /* 페이징 처리 S */
-//
+        Pageable pageable = PageRequest.of(page - 1, limit, Sort.by(desc("createdAt")));
+        Page<Product> data = repository.findAll(andBuilder, pageable);
+        List<Product> items = data.getContent();
+        long total = data.getTotalElements();
 
+        items.forEach(this::addInfo);  // 추가 정보 처리
 
-        // 전체 갯수
-        int total = jdbcTemplate.queryForObject(sb2.toString(), int.class, params.toArray());
-
-        sb1.append(" ORDER BY createdAt DESC LIMIT ?, ?");
-        params.add(offset);
-        params.add(limit);
-
-        // 상품 목록 조회
-        List<Product> items = jdbcTemplate.query(sb1.toString(), this::mapper, params.toArray());
-        items.forEach(this::addInfo); // 추가 정보 처리
-
-        Pagination pagination = new Pagination(page, total, 10, limit, request);
-        /* 페이징 처리 E */
+        Pagination pagination = new Pagination(page, (int)total, 10, limit, request);
 
         return new ListData<>(items, pagination);
     }

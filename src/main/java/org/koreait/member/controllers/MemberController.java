@@ -1,13 +1,14 @@
 package org.koreait.member.controllers;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.koreait.global.annotations.ApplyCommonController;
 import org.koreait.global.libs.Utils;
 import org.koreait.member.libs.MemberUtil;
 import org.koreait.member.services.JoinService;
+import org.koreait.member.social.constants.SocialType;
+import org.koreait.member.social.services.KakaoLoginService;
 import org.koreait.member.validators.JoinValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,6 +30,7 @@ public class MemberController {
     private final Utils utils;
     private final JoinValidator joinValidator;
     private final JoinService joinService;
+    private final KakaoLoginService kakaoLoginService;
     private final MemberUtil memberUtil;
 
     @ModelAttribute("addCss")
@@ -43,8 +45,14 @@ public class MemberController {
 
     // 회원가입 양식
     @GetMapping("/join")
-    public String join(@ModelAttribute RequestJoin form, Model model) {
+    public String join(@ModelAttribute RequestJoin form,
+                       Model model,
+                       @SessionAttribute(name = "socialType", required = false)SocialType type,
+                       @SessionAttribute(name = "socialToken", required = false)String socialToken) {
         commonProcess("join", model);
+
+        form.setSocialType(type);
+        form.setSocialToken(socialToken);
 
         return utils.tpl("member/join");
     }
@@ -70,10 +78,6 @@ public class MemberController {
     public String login(@ModelAttribute RequestLogin form, Errors errors, Model model) {
         commonProcess("login", model);
 
-        HttpSession session = request.getSession();
-        RequestLogin savedForm = (RequestLogin) session.getAttribute("requestLogin");
-        session.removeAttribute("requestLogin"); // 세션 제거 (한번만 쓰기 위해)
-
         /* 검증 실패 처리 S */
         List<String> fieldErrors = form.getFieldErrors();
         if (fieldErrors != null) {
@@ -88,6 +92,9 @@ public class MemberController {
             globalErrors.forEach(errors::reject);
         }
         /* 검증 실패 처리 E */
+
+        /* 소셜 로그인 URL */
+        model.addAttribute("kakaoLoginUrl", kakaoLoginService.getLoginUrl(form.getRedirectUrl()));
 
         return utils.tpl("member/login");
     }
@@ -152,11 +159,11 @@ public class MemberController {
 //        System.out.println("인증상태:" + auth.isAuthenticated());
 //        System.out.println("Principle:" + auth.getPrincipal());
 //    }
-
-    @ResponseBody
-    @GetMapping("/test")
-    public void test() {
-        System.out.printf("로그인: %s, 관리자여부: %s, 회원정보: %s%n",
-                memberUtil.isLogin(), memberUtil.isAdmin(), memberUtil.getMember());
-    }
+//
+//    @ResponseBody
+//    @GetMapping("/test")
+//    public void test() {
+//        System.out.printf("로그인: %s, 관리자여부: %s, 회원정보: %s%n",
+//                memberUtil.isLogin(), memberUtil.isAdmin(), memberUtil.getMember());
+//    }
 }

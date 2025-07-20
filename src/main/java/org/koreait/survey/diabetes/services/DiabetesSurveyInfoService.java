@@ -1,5 +1,7 @@
 package org.koreait.survey.diabetes.services;
 
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.koreait.global.constants.Gender;
@@ -10,12 +12,13 @@ import org.koreait.global.search.Pagination;
 import org.koreait.member.entities.Member;
 import org.koreait.member.libs.MemberUtil;
 import org.koreait.survey.diabetes.constants.SmokingHistory;
-import org.koreait.survey.entities.DiabetesSurvey;
+import org.koreait.survey.diabetes.entities.DiabetesSurvey;
+import org.koreait.survey.diabetes.entities.QDiabetesSurvey;
+import org.koreait.survey.diabetes.repositories.DiabetesSurveyRepository;
 import org.koreait.survey.exceptions.SurveyNotFoundException;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -23,12 +26,14 @@ import java.util.List;
 
 @Lazy
 @Service
+@Transactional  // 메서드에도 직접 사용 가능하긴 함
 @RequiredArgsConstructor
 public class DiabetesSurveyInfoService {
 
-    private final HttpServletRequest request;
-    private final JdbcTemplate jdbcTemplate;  // sql 쿼리를 쓰기 위한...
     private final MemberUtil memberUtil;
+    private final HttpServletRequest request;
+    private final JPAQueryFactory queryFactory;
+    private final DiabetesSurveyRepository repository;
 
     /**
      * 설문지 1개 조회
@@ -39,22 +44,15 @@ public class DiabetesSurveyInfoService {
      * @return
      */
     public DiabetesSurvey get(Long seq) {
-        try {
-            String sql = "SELECT s.*, m.email, m.name, m.mobile FROM SURVEY_DIABETES s " +
-                    " LEFT JOIN MEMBER m ON s.memberSeq = m.seq WHERE s.seq = ?";
-            DiabetesSurvey item = jdbcTemplate.queryForObject(sql, this::mapper, seq);
+        DiabetesSurvey item = repository.findById(seq).orElseThrow(SurveyNotFoundException::new);
 
-            Member member = memberUtil.getMember(); // 로그인한 회원 정보
-            if (!memberUtil.isLogin() || (!memberUtil.isAdmin() && !member.getSeq().equals(item.getMemberSeq()))) {
-                // 로그인 상태가 아니거나, 일반 회원(관리자X)이면서 설문지 작성한 회원과 일치하지 않을 때
-                throw new UnAuthorizedException();
-            }
-
-            return item;
-
-        } catch (DataAccessException e) {   // 조회 실패한 경우
-            throw new SurveyNotFoundException();
+        Member loggedMember = memberUtil.getMember(); // 로그인한 회원 정보
+        if (!memberUtil.isLogin() || (!memberUtil.isAdmin() && !loggedMember.getSeq().equals(item.getMember().getSeq()))) {
+            // 로그인 상태가 아니거나, 일반 회원(관리자X)이면서 설문지 작성한 회원과 일치하지 않을 때
+            throw new UnAuthorizedException();
         }
+
+        return item;
     }
 
     public ListData<DiabetesSurvey> getList(CommonSearch search) {
@@ -70,17 +68,25 @@ public class DiabetesSurveyInfoService {
         int offset = (page - 1) * limit;  // 레코드 시작 번호
         // -- Pagination Setting E --
 
-        Member member = memberUtil.getMember();  // 현재 로그인한 회원 정보
+        Member loggedMember = memberUtil.getMember();  // 현재 로그인한 회원 정보
+        QDiabetesSurvey diabetesSurvey = QDiabetesSurvey.diabetesSurvey;
 
-        String sql = "SELECT s.*, m.email, m.name, m.mobile FROM SURVEY_DIABETES s " +
-                " LEFT JOIN MEMBER m ON s.memberSeq = m.seq WHERE memberSeq = ?" +
-                " ORDER BY s.createdAt DESC LIMIT ?, ?";
+        // 검색에 대한 추가적인 조건 설정을 위해 이걸 사용하겠다!
+        BooleanBuilder andBuilder = new BooleanBuilder();
+        andBuilder.and(diabetesSurvey.member.eq(loggedMember));
 
-        List<DiabetesSurvey> items = jdbcTemplate.query(sql, this::mapper, member.getSeq(), offset, limit);
+        List<DiabetesSurvey> items = queryFactory.selectFrom(diabetesSurvey)
+                .leftJoin(diabetesSurvey.member)
+                .fetchJoin()
+                .where(andBuilder)
+                .orderBy(diabetesSurvey.createdAt.desc())
+                .offset(offset)
+                .limit(limit)
+                .fetch();
 
-        int total = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM SURVEY_DIABETES WHERE memberSeq = ?", int.class, member.getSeq());
+        long total = repository.count(andBuilder);
 
-        Pagination pagination = new Pagination(page, total, 10, limit, request);
+        Pagination pagination = new Pagination(page, (int)total, 10, limit, request);
 
         return new ListData<>(items, pagination);
     }
@@ -88,7 +94,7 @@ public class DiabetesSurveyInfoService {
     private DiabetesSurvey mapper(ResultSet rs, int i) throws SQLException {
         DiabetesSurvey item = new DiabetesSurvey();
         item.setSeq(rs.getLong("seq"));
-        item.setMemberSeq(rs.getLong("memberSeq"));
+//        item.setMemberSeq(rs.getLong("memberSeq"));
         item.setGender(Gender.valueOf(rs.getString("gender")));
         item.setAge(rs.getInt("age"));
         item.setDiabetes(rs.getBoolean("diabetes"));

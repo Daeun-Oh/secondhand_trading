@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.koreait.global.constants.Gender;
 import org.koreait.survey.diabetes.constants.SmokingHistory;
 import org.koreait.survey.diabetes.controllers.RequestDiabetesSurvey;
-import org.koreait.survey.entities.DiabetesSurvey;
+import org.koreait.survey.diabetes.entities.DiabetesSurvey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 

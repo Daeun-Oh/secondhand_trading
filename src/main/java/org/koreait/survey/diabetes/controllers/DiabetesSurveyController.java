@@ -11,7 +11,7 @@ import org.koreait.global.search.ListData;
 import org.koreait.survey.diabetes.constants.SmokingHistory;
 import org.koreait.survey.diabetes.services.DiabetesSurveyInfoService;
 import org.koreait.survey.diabetes.services.DiabetesSurveyService;
-import org.koreait.survey.entities.DiabetesSurvey;
+import org.koreait.survey.diabetes.entities.DiabetesSurvey;
 import org.koreait.survey.validators.DiabetesSurveyValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

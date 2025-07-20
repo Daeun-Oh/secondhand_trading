@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.koreait.admin.global.controllers.CommonController;
 import org.koreait.global.annotations.ApplyCommonController;
 import org.koreait.trend.entities.Trend;
-import org.koreait.trend.services.TrendInfoService;
+import org.koreait.trend.services.EtcTrendInfoService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -21,7 +21,7 @@ import java.util.List;
 @RequestMapping("/admin/trend")
 public class TrendController extends CommonController {
 
-    private final TrendInfoService infoService;
+    private final EtcTrendInfoService infoService;
 
     @Override
     @ModelAttribute("mainCode")

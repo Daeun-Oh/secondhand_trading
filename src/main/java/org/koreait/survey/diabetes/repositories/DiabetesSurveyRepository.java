@@ -1,6 +1,6 @@
 package org.koreait.survey.diabetes.repositories;
 
-import org.koreait.survey.entities.DiabetesSurvey;
+import org.koreait.survey.diabetes.entities.DiabetesSurvey;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 

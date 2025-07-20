@@ -2,6 +2,9 @@ package org.koreait.global.configs;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +15,10 @@ import org.springframework.web.client.RestTemplate;
 
 @Configuration
 public class BeanConfig {
+
+    @PersistenceContext
+    private EntityManager em;
+
     /**
      * 1. model Mapper 의존성
      * - 동일한 getter, setter 패턴이 있으면 데이터를 서로 치환
@@ -39,5 +46,11 @@ public class BeanConfig {
     @Bean
     public RestTemplate restTemplate() {
         return new RestTemplate(new HttpComponentsClientHttpRequestFactory());
+    }
+
+    @Lazy
+    @Bean
+    public JPAQueryFactory jpaQueryFactory() {
+        return new JPAQueryFactory(em);
     }
 }

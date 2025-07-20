@@ -24,9 +24,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.List;
 import java.util.Objects;
 
@@ -105,7 +102,7 @@ public class MemberInfoService implements UserDetailsService {
 
         /* 권한 조건 검색 S */
         List<Authority> authorities = search.getAuthorityList();
-        if (!authorities.isEmpty()) {
+        if (authorities != null && !authorities.isEmpty()) {
             andBuilder.and(member.authority.in(authorities));
         }
         /* 권한 조건 검색 E */
@@ -118,28 +115,5 @@ public class MemberInfoService implements UserDetailsService {
         Pagination pagination = new Pagination(page, (int)total, 10, limit, request);
 
         return new ListData<>(items, pagination);
-    }
-
-    private Member mapper(ResultSet rs, int i) throws SQLException {
-        Member item = new Member();
-        item.setSeq(rs.getLong("seq"));
-        item.setName(rs.getString("name"));
-        item.setEmail(rs.getString("email"));
-        item.setMobile(rs.getString("mobile"));
-        item.setAuthority(Authority.valueOf(rs.getString("authority")));
-        item.setLocked(rs.getBoolean("locked"));
-        Timestamp expired = rs.getTimestamp("expired");
-        Timestamp credentialExpired = rs.getTimestamp("credentialChangedAt");
-        Timestamp createdAt = rs.getTimestamp("createdAt");
-        Timestamp modifiedAt = rs.getTimestamp("modifiedAt");
-        Timestamp deletedAt = rs.getTimestamp("deletedAt");
-
-        item.setExpired(expired == null ? null : expired.toLocalDateTime());
-        item.setCredentialChangedAt(credentialExpired == null ? null : credentialExpired.toLocalDateTime());
-        item.setCreatedAt(createdAt == null ? null : createdAt.toLocalDateTime());
-        item.setModifiedAt(modifiedAt == null ? null : modifiedAt.toLocalDateTime());
-        item.setDeletedAt(deletedAt == null ? null : deletedAt.toLocalDateTime());
-
-        return item;
     }
 }
