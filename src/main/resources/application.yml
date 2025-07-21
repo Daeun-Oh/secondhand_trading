@@ -1,7 +1,8 @@
 server:
-  port: 4000
+  port: 3000
   servlet:
     session.cookie.name: b8a5f3fb
+  use-forward-headers: true
 
 spring:
   # 데이터베이스 설정
