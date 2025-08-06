@@ -6,6 +6,7 @@ import org.koreait.global.entities.BaseEntity;
 import org.koreait.member.constants.Authority;
 import org.koreait.member.social.constants.SocialType;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Data
@@ -15,9 +16,8 @@ import java.time.LocalDateTime;
         @Index(name = "idx_member_name", columnList = "name"),
         @Index(name = "idx_member_mobile", columnList = "mobile"),
         // 관리자 페이지에서 카카오, 네이버 로그인 멤버를 분류해서 보고 싶을 때는 socialType만 사용할 수 있다. 보통은 아래와 같이 Token과 같이 사용.
-        @Index(name = "idx_member_social", columnList = "socialType, socialToken")
-})
-public class Member extends BaseEntity {
+        @Index(name = "idx_member_social", columnList = "socialType, socialToken")})
+public class Member extends BaseEntity implements Serializable {
     @Id
     @GeneratedValue
     private Long seq;
